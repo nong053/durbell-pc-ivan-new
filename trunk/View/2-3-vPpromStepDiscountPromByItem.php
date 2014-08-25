@@ -13,8 +13,24 @@ LimitFreeQty
 FreeUnitCode
 LimitDiscBaht
 */
-$sql="SELECT * FROM PromItem WHERE PromNo='$paramPromNo' and PromType='$paramPromType' and PromCode='$paramPromCode'";
+$sql="SELECT pi.*,ph.PromDesc as PromDesc ,Item.ItemDesc
+FROM PromItem pi 
+inner join PromHeader ph on pi.PromNo=ph.PromNo
+inner join Item on pi.PromCode=Item.ItemCode
+WHERE pi.PromNo='$paramPromNo' and pi.PromType='$paramPromType' and pi.PromCode='$paramPromCode'";
+
+
+$sqlCountRows="SELECT count(*) as countRows
+FROM PromStep
+WHERE PromType='$paramPromType'
+And PromNo='$paramPromNo'
+and PromCode='$paramPromCode'";
+
 $rs=odbc_exec($conn,$sql);
+$rsCoountRows=odbc_exec($conn,$sqlCountRows);
+odbc_fetch_row($rsCoountRows);
+$countRows=odbc_result($rsCoountRows,"countRows");
+
 if (!$rs) {
   exit("Error in SQL");
 }
@@ -23,6 +39,8 @@ while (odbc_fetch_row($rs)) {
   $PromCode=odbc_result($rs,"PromCode");
   $BreakBy=odbc_result($rs,"BreakBy");
   $DiscFor=odbc_result($rs,"DiscFor");
+  $PromDesc=odbc_result($rs,"PromDesc");
+  $ItemDesc=odbc_result($rs,"ItemDesc");
 }
 odbc_close($conn);
 ?>
@@ -50,8 +68,8 @@ odbc_close($conn);
 				<table>
 					<tr>
 						<td> Promotion No</td>
-						<td>
-							<b id="PromNo"><?=$PromNo?>&nbsp; Detail PromNo</b>
+						<td colspan="4">
+							<b id="PromNo"><?=$PromNo?>&nbsp; <?=$PromDesc?></b>
 							<!--
 							<input text="text" name="promotionNo"  value="D1520501"/>
 							&nbsp;
@@ -63,8 +81,8 @@ odbc_close($conn);
 						<td>
 							Item Code
 						</td>
-						<td>
-							<b id="PromCode"><?=$PromCode?>&nbsp; Detail PromCode</b>
+						<td  colspan="4">
+							<b id="PromCode"><?=$PromCode?>&nbsp; <?=$ItemDesc?></b>
 						<!--
 							<input type="text" name="itemCode" value="11130801">
 							&nbsp;
@@ -76,7 +94,7 @@ odbc_close($conn);
 					
 					<tr>
 						<td>Break By</td>
-						<td>
+						<td  colspan="4">
 							<b><?=$BreakBy?></b>
 							
 							(Q-Quanlity A-Amonut LQ-Loop Quanlity LA-Loop Amonut)
@@ -86,7 +104,7 @@ odbc_close($conn);
 						<td>
 							Discount For
 						</td>
-						<td>
+						<td  colspan="4">
 						
 								
 							<b><?=$DiscFor?></b>
@@ -99,9 +117,9 @@ odbc_close($conn);
 						<td>
 							Step
 						</td>
-						<td>
+						<td  colspan="4">
 						
-							<input  class="inputData" type="text" id="Step" name="Step">	
+							<input  class="inputData" type="text" id="Step" name="Step" value="<?=$countRows+1?>" readonly="readonly"  style="background:#f5f5f5">	
 						
 						</td>
 					</tr>
@@ -109,23 +127,24 @@ odbc_close($conn);
 						<td>
 							Promotion Step Note
 						</td>
-						<td>
+						<td  colspan="4">
 						
 							<textarea  class="inputData" rows="5" cols="50" id="PromStepNote" name="PromStepNote"></textarea>	
 						
 						</td>
 					</tr>
-					
+					<!--
 					<tr>
 						<td>
 							Minimum SKU
 						</td>
-						<td>
+						<td  colspan="4">
 						
 							<input class="inputData" type="text" id="MinimumSKU" name="MinimumSKU">	
 						
 						</td>
 					</tr>
+					-->
 
 					<tr>
 						<td colspan="2">
@@ -138,13 +157,13 @@ odbc_close($conn);
 							<tr>
 								<td>Break Quantity</td>
 								<td>
-								<input  class="inputData" type="text" id="BreakQty" name="BreakQty">
+								<input  class="inputData" type="text" id="BreakQty" name="BreakQty" value="0">
 								</td>
 								<td>
 								Unit
 								
 								</td>
-								<td>
+								<td id="unitCodeBreakArea">
 								<select>
 									<option>
 									Pack
@@ -159,7 +178,7 @@ odbc_close($conn);
 								
 								<td>Break Quantity Factory</td>
 								<td>
-								<input  class="inputData" type="text" id="BreakUnitFactor" name="BreakUnitFactor">
+								<input  class="inputData" type="text" id="BreakUnitFactor" name="BreakUnitFactor" value="0" readonly="readonly"  style="background:#f5f5f5">
 								</td>
 							</tr>
 						<?php
@@ -169,7 +188,7 @@ odbc_close($conn);
 						<tr>
 							<td>Break Amount</td>
 							<td>
-							<input  class="inputData" type="text"  id="BreakAmt" name="BreakAmt">
+							<input  class="inputData" type="text"  id="BreakAmt" name="BreakAmt"  value="0">
 							</td>
 						</tr>
 
@@ -188,14 +207,14 @@ odbc_close($conn);
 					?>
 						<tr>
 							<td>Discount Percent</td>
-							<td><input  class="inputData" type="text" name="DiscPer" id="DiscPer"></td>
+							<td><input  class="inputData" type="text" name="DiscPer" id="DiscPer"  value="0"></td>
 						</tr>
 					<?php
 					}else{
 					?>
 					<tr>
 							<td>Discount Bath</td>
-							<td><input  class="inputData" type="text" name="DiscBaht" id="DiscBaht"></td>
+							<td><input  class="inputData" type="text" name="DiscBaht" id="DiscBaht"  value="0"></td>
 					</tr>
 					<?php
 					}

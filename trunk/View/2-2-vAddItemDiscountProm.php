@@ -110,8 +110,9 @@ odbc_close($conn);
 						</td>
 						<td  id="disCountForArea" colspan="2">
 							<select  name="disCountFor" id="disCountFor">
-								<option value="B">B</option>
 								<option value="P">P</option>
+								<option value="B">B</option>
+								
 						
 							</select>
 						
