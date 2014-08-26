@@ -402,9 +402,11 @@ Note here..<br>
 									<th>
 									End Date
 									</th>
+									<!--
 									<th>
 									Away
 									</th>
+									-->
 									<th>
 									Priority
 									</th>
@@ -426,9 +428,11 @@ Note here..<br>
 									<td id="cEndDate">
 									28/05/2553
 									</td>
+									<!--
 									<td id="cAlway">
 									
 									</td>
+									-->
 									<td id="cPriority">
 									
 									</td>
