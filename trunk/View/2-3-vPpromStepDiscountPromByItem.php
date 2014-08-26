@@ -20,7 +20,7 @@ inner join Item on pi.PromCode=Item.ItemCode
 WHERE pi.PromNo='$paramPromNo' and pi.PromType='$paramPromType' and pi.PromCode='$paramPromCode'";
 
 
-$sqlCountRows="SELECT count(*) as countRows
+$sqlCountRows="SELECT max(Step) as countRows
 FROM PromStep
 WHERE PromType='$paramPromType'
 And PromNo='$paramPromNo'
@@ -163,7 +163,7 @@ odbc_close($conn);
 								Unit
 								
 								</td>
-								<td id="unitCodeBreakArea">
+								<td id="breakUnitCodeArea">
 								<select>
 									<option>
 									Pack
@@ -203,7 +203,7 @@ odbc_close($conn);
 					</tr>
 
 					<?php
-					if($BreakBy=="B" or $BreakBy=="LB" ){
+					if($DiscFor=="P"){
 					?>
 						<tr>
 							<td>Discount Percent</td>
@@ -581,7 +581,7 @@ odbc_close($conn);
 		          	<tr>
 		          		<td>Free Qty</td>
 		          		<td >
-		          			<input type="text" size="20" id="FreeQty" name="FreeQty">
+		          			<input type="text" size="20" id="FreeQty" name="FreeQty" value="1">
 		          		</td >
 		          		<td >Unit </td>
 		          		<td id="unitCodeArea">
@@ -596,7 +596,7 @@ odbc_close($conn);
 		          		<td>Free Unit Factor </td>
 		          		<td>
 		          			<div >
-								<input id="FreeUnitFactor" type="text" size="20" style="background:#f5f5f5 ">
+								<input id="FreeUnitFactor" type="text" size="20" style="background:#f5f5f5 " value="1">
 							</div>
 		          		</td>
 		          	</tr>
